@@ -1,7 +1,6 @@
 from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.database import new_session
+from src.application.database import new_session
 from src.geopos.models import GeoPosOrm
 from src.geopos.schemas import SAddGeoPos, SGeoPos
 

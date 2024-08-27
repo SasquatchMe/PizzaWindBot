@@ -1,6 +1,6 @@
 from sqlalchemy import select
 
-from src.database import new_session
+from src.application.database import new_session
 from src.users.models import UserOrm
 from src.users.schemas import SAddUser, SDeleteUser, SGetUserById
 

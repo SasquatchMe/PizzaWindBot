@@ -1,24 +1,56 @@
 DC = docker compose
+DB_FILE = docker_compose/storage.yml
 DB_CONTAINER = pg_db
-FASTAPI_APP = src.main:app
+APP_FILE = docker_compose/app.yml
+APP_CONTAINER = main-app
 EXEC = docker exec -it
-A_MIG = alembic revision --autogenerate
-A_UPG = alembic upgrade head
+MG= alembic revision --autogenerate
+UPG = alembic upgrade head
+ENV = --env-file .env
+LOGS = docker logs
 
-db:
-	$(DC) up -d
 
-db-down:
-	$(DC) down
+.PHONY: storage
+storage:
+	$(DC) -f $(DB_FILE) $(ENV) up -d
 
-db-logs:
-	$(DC) logs
+.PHONY: storage-down
+storage-down:
+	$(DC) -f $(DB_FILE) $(ENV) down
 
-mg:
-	$(A_MIG)
+.PHONY: storage-logs
+storage-logs:
+	$(LOGS) $(DB_CONTAINER) -f
 
-upg:
-	$(A_UPG)
-
+.PHONY: app
 app:
-	uvicorn $(FASTAPI_APP) --reload
+	$(DC) -f $(APP_FILE) $(ENV) up --build -d
+
+.PHONY: app-down
+app-down:
+	$(DC) -f $(APP_FILE) $(ENV)  down
+
+.PHONY: app-logs
+app-logs:
+	$(LOGS) $(APP_CONTAINER) -f
+
+.PHONY: migrations
+migrations:
+	$(EXEC) $(APP_CONTAINER) $(MG)
+
+
+.PHONY: migrate
+migrate:
+	$(EXEC) $(APP_CONTAINER) $(UPG)
+
+.PHONY: all
+all:
+	$(DC) -f $(APP_FILE) $(ENV) -f $(DB_FILE) $(ENV) up --build -d
+
+.PHONY: all-down
+all-down:
+	$(DC) -f $(APP_FILE) $(ENV) -f $(DB_FILE) $(ENV) down
+
+
+
+

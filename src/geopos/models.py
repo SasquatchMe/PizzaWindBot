@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Float
 
-from src.database import Base
+from src.application.database import Base
 
 
 class GeoPosOrm(Base):
