@@ -1,8 +1,10 @@
-from sqlalchemy import select
+from sqlalchemy import select, func
+from sqlalchemy.orm import selectinload
 
 from src.application.database import new_session
 from src.geopos.models import GeoPosOrm
 from src.geopos.schemas import SAddGeoPos, SGeoPos
+from src.questions.models import QuestionOrm
 
 
 class GeoPosRepo:
@@ -21,7 +23,7 @@ class GeoPosRepo:
     @classmethod
     async def get_all(cls):
         async with new_session() as session:
-            query = select(GeoPosOrm)
+            query = select(GeoPosOrm).options(selectinload(GeoPosOrm.questions).selectinload(QuestionOrm.answers))
             result = await session.execute(query)
             geopos_models = result.scalars().all()
             return geopos_models
@@ -35,3 +37,13 @@ class GeoPosRepo:
             await session.flush()
             await session.commit()
             return geopos.id
+
+    @classmethod
+    async def get_random_geopos(cls, value):
+        async with new_session() as session:
+            stmt = select(GeoPosOrm).options(
+                selectinload(GeoPosOrm.questions)
+                .selectinload(QuestionOrm.answers)).order_by(func.random()).limit(value)
+            result= await session.execute(stmt)
+            geopos_models = result.scalars().all()
+            return geopos_models

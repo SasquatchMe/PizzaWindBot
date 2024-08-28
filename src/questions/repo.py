@@ -13,9 +13,8 @@ class QuestionRepo:
     @classmethod
     async def get_all_questions(cls):
         async with new_session() as session:
-            query = select(QuestionOrm).options(selectinload(QuestionOrm.geopos))
+            query = select(QuestionOrm).options(selectinload(QuestionOrm.answers))
             result: Result[Any] = await session.execute(query)
-            print(result)
             questions_models = result.scalars().all()
             return questions_models
 
@@ -47,13 +46,6 @@ class QuestionRepo:
             await session.commit()
             return question.id
 
-    @classmethod
-    async def get_five_random_questions(cls, value):
-        async with new_session() as session:
-            stmt = select(QuestionOrm).options(selectinload(QuestionOrm.geopos)).order_by(func.random()).limit(value)
-            result: Result[Any] = await session.execute(stmt)
-            questions_models = result.scalars().all()
-            return questions_models
 
 
 

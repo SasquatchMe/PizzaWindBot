@@ -1,11 +1,12 @@
 from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import mapped_column, Mapped
 
 from src.application.database import Base
 
 
 class UserOrm(Base):
-    __tablename__ = "user"
+    __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True)
-    first_name = Column(String)
-    tg_id = Column(Integer)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    first_name: Mapped[str]
+    tg_id: Mapped[int]

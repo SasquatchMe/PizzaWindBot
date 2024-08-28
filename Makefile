@@ -8,6 +8,8 @@ MG= alembic revision --autogenerate
 UPG = alembic upgrade head
 ENV = --env-file .env
 LOGS = docker logs
+BOT_FILE = docker_compose/bot.yml
+BOT_CONTAINER = bot
 
 
 .PHONY: storage
@@ -52,5 +54,18 @@ all-down:
 	$(DC) -f $(APP_FILE) $(ENV) -f $(DB_FILE) $(ENV) down
 
 
+.PHONY: bot
+bot:
+	$(DC) -f $(BOT_FILE) up --build -d
 
+.PHONY: bot-down
+bot-down:
+	$(DC) -f $(BOT_FILE) down
 
+.PHONY: bot-logs
+bot-logs:
+	$(LOGS) $(BOT_CONTAINER) -f
+
+.PHONY: bot-shell
+bot-shell:
+	$(EXEC) $(BOT_CONTAINER) bash

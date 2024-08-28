@@ -12,13 +12,7 @@ async def add_question(question: SAddQuestion = Depends(SAddQuestion)):
     return {"status": "ok", "question_id": question_id}
 
 
-@router.get("", response_model=list[SQuestion])
+@router.get("")
 async def get_all_questions():
     questions = await QuestionRepo.get_all_questions()
-    return questions
-
-
-@router.get('/random/{value}')
-async def get_random_question(value: int):
-    questions = await QuestionRepo.get_five_random_questions(value)
     return questions

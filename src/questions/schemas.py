@@ -1,6 +1,8 @@
+from collections.abc import Iterable, Iterator
+
 from pydantic import BaseModel
 
-from src.geopos.schemas import SGeoPos
+from src.answers.schemas import SAnswer
 
 
 class SAddQuestion(BaseModel):
@@ -9,7 +11,7 @@ class SAddQuestion(BaseModel):
 
 class SQuestion(SAddQuestion):
     id: int
-    geopos: SGeoPos
+    answers: list[SAnswer] = []
 
     class Config:
         orm_mode = True

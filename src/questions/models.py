@@ -11,4 +11,5 @@ class QuestionOrm(Base):
     text: Mapped[str]
     geopos_id: Mapped[int] = mapped_column(ForeignKey('geopositions.id'))
 
-    geopos: Mapped["GeoPosOrm"] = relationship(back_populates='questions')
+    geopos  = relationship('GeoPosOrm',back_populates='questions')
+    answers = relationship('AnswerOrm',back_populates='questions')

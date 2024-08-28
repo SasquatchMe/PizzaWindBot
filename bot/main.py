@@ -2,14 +2,39 @@ import asyncio
 import logging
 import sys
 
-from bot import bot
-from handlers import dp
+from aiogram import Bot, Dispatcher
+from aiogram.fsm.scene import SceneRegistry
+from aiogram.fsm.storage.memory import SimpleEventIsolation
+
+from bot.config import BOT_***
+from bot.test import quiz_router, QuizScene
+from message_handlers.start_handler import router as start_router
+from callback_handlers.quiz_handler import router as start_quiz_router
+
 
 
 async def main():
+    bot = Bot(token=BOT_***)
+
+    dp = Dispatcher(events_isolation=SimpleEventIsolation())
+
+    dp.include_router(start_router)
+    dp.include_router(start_quiz_router)
+    dp.include_router(quiz_router)
+
+    scene_registry = SceneRegistry(dp)
+    scene_registry.add(QuizScene)
+
+
+
+
+
     await dp.start_polling(bot)
 
-
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
+    logging.basicConfig(level=logging.INFO,
+                        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                        datefmt='%m/%d/%Y %I:%M:%S %p',
+                        stream=sys.stdout
+                        )
     asyncio.run(main())

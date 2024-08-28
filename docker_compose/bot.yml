@@ -1,0 +1,10 @@
+services:
+  bot:
+    build:
+      context: ..
+      dockerfile: Dockerfile-bot
+
+    command: python bot/main.py -d
+    container_name: bot
+    volumes:
+      - ../bot:/app/bot/

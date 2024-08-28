@@ -18,3 +18,8 @@ async def add_one_geopos(geopos: SAddGeoPos = Depends(SAddGeoPos)):
 async def get_all_geopos() -> dict[str, list[SGeoPos]]:
     geoposes = await GeoPosRepo.get_all()
     return {'geoposes': geoposes}
+
+@router.get('/random/{value}')
+async def get_random_geopos(value: int) -> list[SGeoPos]:
+    geoposes = await GeoPosRepo.get_random_geopos(value)
+    return geoposes
