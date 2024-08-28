@@ -35,4 +35,3 @@ class GeoPosRepo:
             await session.flush()
             await session.commit()
             return geopos.id
-

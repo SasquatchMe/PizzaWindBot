@@ -1,12 +1,8 @@
-import asyncio
-
 from fastapi import FastAPI
 
-from src.application.database import create_tables
-from src.users.router import router as users_router
 from src.geopos.router import router as geopos_router
-
-
+from src.users.router import router as users_router
+from src.questions.router import router as questions_router
 
 
 def create_app() -> FastAPI:
@@ -23,6 +19,9 @@ def create_app() -> FastAPI:
     app.include_router(
         geopos_router,
         tags=["Geoposes"],
+    )
+    app.include_router(
+        questions_router,
     )
 
     return app

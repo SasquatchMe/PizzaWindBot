@@ -1,12 +1,13 @@
-from sqlalchemy import Column, Integer, String, Float
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.application.database import Base
 
-
 class GeoPosOrm(Base):
-    __tablename__ = "geoposition"
+    __tablename__ = "geopositions"
 
-    id = Column(Integer, primary_key=True)
-    longitude = Column(Float)
-    latitude = Column(Float)
-    description = Column(String, nullable=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    longitude: Mapped[float]
+    latitude: Mapped[float]
+    description: Mapped[str] = mapped_column(nullable=True)
+
+    questions: Mapped["QuestionOrm"] = relationship(back_populates='geopos')

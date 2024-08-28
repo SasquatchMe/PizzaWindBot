@@ -2,8 +2,8 @@ import asyncio
 import logging
 import sys
 
-from handlers import dp
 from bot import bot
+from handlers import dp
 
 
 async def main():

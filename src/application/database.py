@@ -1,7 +1,8 @@
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import declarative_base, selectinload
 
 from src.application.config import settings
+
 
 engine = create_async_engine(
     url=settings.DATABASE_URL_asyncpg,
@@ -20,5 +21,10 @@ async def create_tables():
 async def drop_tables():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
+
+
+
+
+
 
 
