@@ -212,20 +212,3 @@ quiz_router = Router(name=__name__)
 # Add handler that initializes the scene
 quiz_router.message.register(QuizScene.as_handler(), Command('quest') )
 
-
-def create_dispatcher():
-    # Event isolation is needed to correctly handle fast user responses
-    dispatcher = Dispatcher(
-        events_isolation=SimpleEventIsolation(),
-    )
-    dispatcher.include_router(quiz_router)
-
-    # To use scenes, you should create a SceneRegistry and register your scenes there
-    scene_registry = SceneRegistry(dispatcher)
-    # ... and then register a scene in the registry
-    # by default, Scene will be mounted to the router that passed to the SceneRegistry,
-    # but you can specify the router explicitly using the `router` argument
-    scene_registry.add(QuizScene)
-
-    return dispatcher
-

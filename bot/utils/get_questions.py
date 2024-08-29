@@ -4,8 +4,9 @@ import requests
 
 
 def get_questions_from_api():
-    questions = requests.get('http://main-app:8000/questions').json()
-    return questions[:5]
+    geos = requests.get('http://main-app:8000/geopos').json()
+    # geos = requests.get('http://127.0.0.1:8000/geopos').json()
+    return geos['geoposes'][1:4]
 
 
 @dataclass
@@ -30,6 +31,7 @@ class Question:
     """The question text"""
     answers: list[Answer]
     """List of answers"""
+    location: tuple[float, float]
 
     correct_answer: str = field(init=False)
 
@@ -40,14 +42,23 @@ class Question:
 def map_question_answer(data):
     result = []
 
-    for question in data:
-        answers: list[Answer] = []
-        for answer in question['answers']:
+    for geopos in data:
+        answers = []
+        coord = (geopos['latitude'], geopos['longitude'])
+        q_text = geopos['questions']['text']
+
+        for answer in geopos['questions']['answers']:
             answers.append(Answer(text=answer['text'], is_correct=answer['is_correct']))
-        result.append(Question(text=question['text'], answers=answers))
+
+        result.append(Question(text=q_text, answers=answers, location=coord))
+
     return result
 
 
 def get_questions():
     questions = map_question_answer(get_questions_from_api())
     return questions
+
+
+# for i in get_questions_from_api():
+#     print(i)

@@ -47,11 +47,11 @@ migrate:
 
 .PHONY: all
 all:
-	$(DC) -f $(APP_FILE) $(ENV) -f $(DB_FILE) $(ENV) up --build -d
+	$(DC) -f $(APP_FILE) $(ENV) -f $(DB_FILE) $(ENV) -f $(BOT_FILE) up --build -d
 
 .PHONY: all-down
 all-down:
-	$(DC) -f $(APP_FILE) $(ENV) -f $(DB_FILE) $(ENV) down
+	$(DC) -f $(APP_FILE) $(ENV) -f $(DB_FILE) $(ENV) -f $(BOT_FILE) down
 
 
 .PHONY: bot
