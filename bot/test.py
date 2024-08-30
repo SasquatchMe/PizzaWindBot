@@ -207,8 +207,6 @@ class QuizScene(Scene, state="quiz"):
         """
         await message.answer("Пожалуйста, выберите ответ")
 
-
 quiz_router = Router(name=__name__)
-# Add handler that initializes the scene
-quiz_router.message.register(QuizScene.as_handler(), Command('quest') )
+
 

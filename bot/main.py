@@ -8,8 +8,9 @@ from aiogram.fsm.storage.memory import SimpleEventIsolation
 
 from bot.config import BOT_***
 from bot.test import quiz_router, QuizScene
-from message_handlers.start_handler import router as start_router
-from callback_handlers.quiz_handler import router as start_quiz_router
+from bot.quiz.message_handlers.start_handler import router as start_router
+from bot.quiz.callback_handlers.quiz_handler import router as start_quiz_router
+from bot.quiz.message_handlers.quiz import router as quiz_router
 
 
 
@@ -21,13 +22,6 @@ async def main():
     dp.include_router(start_router)
     dp.include_router(start_quiz_router)
     dp.include_router(quiz_router)
-
-    scene_registry = SceneRegistry(dp)
-    scene_registry.add(QuizScene)
-
-
-
-
 
     await dp.start_polling(bot)
 
