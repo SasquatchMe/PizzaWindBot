@@ -10,10 +10,8 @@ from src.questions.models import QuestionOrm
 class GeoPosRepo:
 
     @classmethod
-    async def get_one(cls, data: SGeoPos):
+    async def get_one(cls, geopos_id):
         async with new_session() as session:
-            geopos_data = data.model_dump()
-            geopos_id = geopos_data['id']
 
             query = select(GeoPosOrm).where(GeoPosOrm.id == geopos_id)
             result = await session.execute(query)
@@ -23,7 +21,9 @@ class GeoPosRepo:
     @classmethod
     async def get_all(cls):
         async with new_session() as session:
-            query = select(GeoPosOrm).options(selectinload(GeoPosOrm.questions).selectinload(QuestionOrm.answers))
+            query = select(GeoPosOrm).options(
+                selectinload(GeoPosOrm.questions).selectinload(QuestionOrm.answers)
+            )
             result = await session.execute(query)
             geopos_models = result.scalars().all()
             return geopos_models
@@ -41,9 +41,14 @@ class GeoPosRepo:
     @classmethod
     async def get_random_geopos(cls, value):
         async with new_session() as session:
-            stmt = select(GeoPosOrm).options(
-                selectinload(GeoPosOrm.questions)
-                .selectinload(QuestionOrm.answers)).order_by(func.random()).limit(value)
-            result= await session.execute(stmt)
+            stmt = (
+                select(GeoPosOrm)
+                .options(
+                    selectinload(GeoPosOrm.questions).selectinload(QuestionOrm.answers)
+                )
+                .order_by(func.random())
+                .limit(value)
+            )
+            result = await session.execute(stmt)
             geopos_models = result.scalars().all()
             return geopos_models

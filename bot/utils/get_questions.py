@@ -4,9 +4,9 @@ import requests
 
 
 def get_questions_from_api():
-    geos = requests.get('http://main-app:8000/geopos').json()
-    # geos = requests.get('http://127.0.0.1:8000/geopos').json()
-    return geos['geoposes'][1:4]
+    geos = requests.get("http://main-app:8000/geopos/random/5").json()
+    # geos = requests.get("http://localhost:8000/geopos/random/5").json()
+    return geos
 
 
 @dataclass
@@ -36,7 +36,9 @@ class Question:
     correct_answer: str = field(init=False)
 
     def __post_init__(self):
-        self.correct_answer = next(answer.text for answer in self.answers if answer.is_correct)
+        self.correct_answer = next(
+            answer.text for answer in self.answers if answer.is_correct
+        )
 
 
 def map_question_answer(data):
@@ -44,11 +46,11 @@ def map_question_answer(data):
 
     for geopos in data:
         answers = []
-        coord = (geopos['latitude'], geopos['longitude'])
-        q_text = geopos['questions']['text']
+        coord = (geopos["latitude"], geopos["longitude"])
+        q_text = geopos["questions"]["text"]
 
-        for answer in geopos['questions']['answers']:
-            answers.append(Answer(text=answer['text'], is_correct=answer['is_correct']))
+        for answer in geopos["questions"]["answers"]:
+            answers.append(Answer(text=answer["text"], is_correct=answer["is_correct"]))
 
         result.append(Question(text=q_text, answers=answers, location=coord))
 
@@ -58,7 +60,3 @@ def map_question_answer(data):
 def get_questions():
     questions = map_question_answer(get_questions_from_api())
     return questions
-
-
-# for i in get_questions_from_api():
-#     print(i)

@@ -4,6 +4,7 @@ from src.answers.models import AnswerOrm
 from src.answers.schemas import SAddAnswer
 from src.application.database import new_session
 
+
 class AnswerRepo:
 
     @classmethod
@@ -34,8 +35,6 @@ class AnswerRepo:
             await session.flush()
             await session.commit()
             return True
-
-
 
     @classmethod
     async def delete_one(cls, answer_id):

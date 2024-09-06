@@ -9,17 +9,19 @@ router = APIRouter(
 )
 
 
-@router.post('')
+@router.post("")
 async def add_one_geopos(geopos: SAddGeoPos = Depends(SAddGeoPos)):
     geopos_id = await GeoPosRepo.add_one(geopos)
-    return {'status': 'ok', 'geopos_id': geopos_id}
+    return {"status": "ok", "geopos_id": geopos_id}
 
-@router.get('')
+
+@router.get("")
 async def get_all_geopos() -> dict[str, list[SGeoPos]]:
     geoposes = await GeoPosRepo.get_all()
-    return {'geoposes': geoposes}
+    return {"geoposes": geoposes}
 
-@router.get('/random/{value}')
+
+@router.get("/random/{value}")
 async def get_random_geopos(value: int) -> list[SGeoPos]:
     geoposes = await GeoPosRepo.get_random_geopos(value)
     return geoposes

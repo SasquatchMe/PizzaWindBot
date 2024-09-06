@@ -1,5 +1,5 @@
 services:
-  postgres:
+  pizza_db:
     image: postgres:latest
     container_name: pizza_db
     ports:
@@ -8,6 +8,11 @@ services:
       - pg_data:/var/lib/postgresql/data
     env_file:
       - '../.env'
+    networks:
+      - pizza_window
+
+networks:
+      pizza_window:
 
 volumes:
   pg_data:

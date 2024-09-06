@@ -29,7 +29,7 @@ class UserRepo:
     @classmethod
     async def get_one(cls, data: SGetUserById):
         async with new_session() as session:
-            user_id = data.model_dump()['id']
+            user_id = data.model_dump()["id"]
             query = select(UserOrm).where(UserOrm.id == user_id)
             result = await session.execute(query)
             user = result.scalar_one()
@@ -38,12 +38,10 @@ class UserRepo:
     @classmethod
     async def delete_user(cls, data: SDeleteUser):
         async with new_session() as session:
-            user_id = data.model_dump()['id']
+            user_id = data.model_dump()["id"]
             query = select(UserOrm).where(UserOrm.id == user_id)
             result = await session.execute(query)
             user = result.scalars().first()
             await session.delete(user)
             await session.commit()
             return user.id
-
-

@@ -2,6 +2,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.application.database import Base
 
+
 class GeoPosOrm(Base):
     __tablename__ = "geopositions"
 
@@ -10,4 +11,4 @@ class GeoPosOrm(Base):
     latitude: Mapped[float]
     description: Mapped[str] = mapped_column(nullable=True)
 
-    questions: Mapped["QuestionOrm"] = relationship(back_populates='geopos')
+    questions: Mapped["QuestionOrm"] = relationship(back_populates="geopos")

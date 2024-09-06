@@ -8,3 +8,8 @@ services:
     container_name: bot
     volumes:
       - ../bot:/app/bot/
+    networks:
+      - pizza_window
+
+networks:
+  pizza_window:

@@ -12,6 +12,3 @@ class SAnswer(SAddAnswer):
 
     class Config:
         orm_mode = True
-
-
-

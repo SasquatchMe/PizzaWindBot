@@ -1,6 +1,6 @@
 from typing import Any
 
-from sqlalchemy import select, Result, func
+from sqlalchemy import select, Result
 from sqlalchemy.orm import selectinload
 
 from src.application.database import new_session
@@ -31,7 +31,11 @@ class QuestionRepo:
     @classmethod
     async def get_one(cls, question_id):
         async with new_session() as session:
-            query = select(QuestionOrm).where(QuestionOrm.id == question_id)
+            query = (
+                select(QuestionOrm)
+                .options(selectinload(QuestionOrm.answers))
+                .where(QuestionOrm.id == question_id)
+            )
             result: Result[Any] = await session.execute(query)
             question = result.scalars().first()
             return question
@@ -45,13 +49,3 @@ class QuestionRepo:
             await session.delete(question)
             await session.commit()
             return question.id
-
-
-
-
-
-
-
-
-
-

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Вопрос{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Вопрос №{{ question.id }}</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><strong>{{ question.text }}</strong></p>
+                        {% if geopos %}
+                            <p class="card-text">
+                                <strong>Геолокация:</strong> {{ geopos.latitude }}, {{ geopos.longitude }}
+                            </p>
+                        {% else %}
+                            <p class="card-text">
+                                <strong>Геолокация:</strong> Нет геолокации
+                            </p>
+                        {% endif %}
+
+                        <div class="mt-4">
+                            <h6>Ответы:</h6>
+                            {% if question.answers %}
+                                <div class="list-group">
+                                    {% for answer in question.answers %}
+                                        <div class="list-group-item">
+                                            <a class="d-block text-decoration-none" data-bs-toggle="collapse" href="#collapseAnswer{{ answer.id }}" role="button" aria-expanded="false" aria-controls="collapseAnswer{{ answer.id }}">
+                                                {{ answer.text }}
+                                            </a>
+                                            <div class="collapse" id="collapseAnswer{{ answer.id }}">
+                                                <div class="card card-body">
+                                                    <p><strong>Дополнительная информация:</strong></p>
+                                                    <p>
+                                                        <strong>
+                                                            {% if answer.is_correct %}
+                                                                <i class="fas fa-check text-success"></i> Правильный ответ
+                                                            {% else %}
+                                                                <i class="fas fa-times text-danger"></i> Неправильный ответ
+                                                            {% endif %}
+                                                        </strong>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <p>Нет ответов.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-footer text-end">
+                        <a href="#" class="btn btn-primary">Изменить</a>
+                        <form action="#" method="post" class="d-inline">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="btn btn-danger">Удалить</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

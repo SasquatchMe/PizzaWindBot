@@ -12,3 +12,8 @@ services:
     volumes:
       - ../src:/app/src/
       - ../alembic:/app/alembic
+    networks:
+      - pizza_window
+
+networks:
+  pizza_window:

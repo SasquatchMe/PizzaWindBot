@@ -1,16 +1,18 @@
 from fastapi import FastAPI
+from starlette.staticfiles import StaticFiles
 
-from src.geopos.router import router as geopos_router
-from src.users.router import router as users_router
-from src.questions.router import router as questions_router
 from src.answers.router import router as answers_router
+from src.geopos.router import router as geopos_router
+from src.questions.router import router as questions_router
+from src.users.router import router as users_router
+from src.pages.router import router as pages_router
 
 
 def create_app() -> FastAPI:
     app = FastAPI(
-        title='PizzaWindBot',
-        docs_url='/api/docs',
-        description='A simple FastAPI + async SQLAlchemy + aiogram application',
+        title="PizzaWindBot",
+        docs_url="/api/docs",
+        description="A simple FastAPI + async SQLAlchemy + aiogram application",
         debug=True,
     )
     app.include_router(
@@ -26,7 +28,10 @@ def create_app() -> FastAPI:
     )
 
     app.include_router(
-        answers_router
+        answers_router,
     )
 
+    app.include_router(
+        pages_router,
+    )
     return app
