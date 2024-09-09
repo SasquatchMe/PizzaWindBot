@@ -1,0 +1,20 @@
+.slide {
+    display: none;
+}
+
+.slide.active {
+    display: block;
+}
+
+.nav-item.add-button {
+    background-color: darkgray;
+    border-radius: 5px;
+}
+.nav-item.add-button:hover {
+    background-color: dimgray;
+    transition-duration: .4s;
+}
+
+.d-block {
+    color: #111111;
+}

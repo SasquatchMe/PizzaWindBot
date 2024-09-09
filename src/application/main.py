@@ -5,7 +5,7 @@ from src.answers.router import router as answers_router
 from src.geopos.router import router as geopos_router
 from src.questions.router import router as questions_router
 from src.users.router import router as users_router
-from src.pages.router import router as pages_router
+from src.web.views.router import router as pages_router
 
 
 def create_app() -> FastAPI:
@@ -15,6 +15,13 @@ def create_app() -> FastAPI:
         description="A simple FastAPI + async SQLAlchemy + aiogram application",
         debug=True,
     )
+
+    app.mount(
+        "/static",
+        StaticFiles(directory="src/web/static"),
+        name="static",
+    )
+
     app.include_router(
         users_router,
         tags=["Users"],

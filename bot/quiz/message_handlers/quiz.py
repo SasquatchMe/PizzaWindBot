@@ -42,9 +42,15 @@ async def start_quest(message: Message, state: FSMContext, step: int = 0):
         await message.answer(text="Завершение квеста...")
         await exit_quest(message, state)
     else:
-        await message.answer(
-            text="Следующий вопрос!", reply_markup=ReplyKeyboardRemove()
-        )
+        if step == 0:
+            await message.answer(
+                text="Первый вопрос!", reply_markup=ReplyKeyboardRemove()
+            )
+        else:
+            await message.answer(
+                text="Следующий вопрос!", reply_markup=ReplyKeyboardRemove()
+            )
+
         await asyncio.sleep(1)
         await message.answer(
             text=f"Беги [СЮДА]({get_url(question.location[0], question.location[1])})",
@@ -84,7 +90,6 @@ async def exit_quest(message: Message, state: FSMContext):
     answers = data.get("answers", {})
     questions = data["questions"]
 
-    print(data)
     correct = 0
     incorrect = 0
     user_answers = []
@@ -124,13 +129,11 @@ async def exit_quest(message: Message, state: FSMContext):
 @router.message(Quest.get_question, F.text)
 async def get_answer(message: Message, state: FSMContext):
     data = await state.get_data()
-    print(data)
     step = data["step"]
     answers = data.get("answers", {})
     answers[step] = message.text
     await state.update_data(answers=answers)
     new_data = await state.get_data()
-    print(new_data)
 
     await message.answer(text=f"Ответ принят!")
     await asyncio.sleep(2)

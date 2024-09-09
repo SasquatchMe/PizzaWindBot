@@ -11,7 +11,12 @@ from src.questions.repo import QuestionRepo
 
 router = APIRouter(prefix="/site")
 
-templates = Jinja2Templates(directory="src/templates")
+templates = Jinja2Templates(directory="src/web/templates")
+
+
+@router.get("/")
+async def index():
+    return RedirectResponse(url="/questions")
 
 
 @router.get("/questions/add")
