@@ -13,7 +13,7 @@ def create_app() -> FastAPI:
         title="PizzaWindBot",
         docs_url="/api/docs",
         description="A simple FastAPI + async SQLAlchemy + aiogram application",
-        debug=True,
+        debug=False,
     )
 
     app.mount(

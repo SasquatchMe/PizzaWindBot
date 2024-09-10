@@ -16,6 +16,11 @@
                             <p class="card-text">
                                 <strong>Геолокация:</strong> {{ geopos.latitude }}, {{ geopos.longitude }}
                             </p>
+                            {% if geopos.description %}
+                               <p class="card-text">
+                                   <strong>Описание геолокации:</strong> {{ geopos.description }}
+                               </p>
+                                {% endif %}
                         {% else %}
                             <p class="card-text">
                                 <strong>Геолокация:</strong> Нет геолокации

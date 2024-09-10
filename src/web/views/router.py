@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Request, Form
 from fastapi.templating import Jinja2Templates
+from sqlalchemy.exc import NoResultFound
 from starlette.responses import HTMLResponse, RedirectResponse
 
 from src.answers.models import AnswerOrm
@@ -79,7 +80,7 @@ async def geoposes_add(
     longitude: float = Form(...),
     desc: str = Form(...),
 ):
-    with new_session() as session:
+    async with new_session() as session:
         geopos = GeoPosOrm(
             latitude=latitude,
             longitude=longitude,
@@ -93,16 +94,26 @@ async def geoposes_add(
 
 @router.get("/questions/{question_id}")
 async def question_detail(request: Request, question_id: int):
-    question = await QuestionRepo.get_one(question_id)
-    geopos = await GeoPosRepo.get_one(question.geopos_id)
-    return templates.TemplateResponse(
-        "question.html",
-        {
-            "request": request,
-            "question": question,
-            "geopos": geopos,
-        },
-    )
+    try:
+        question = await QuestionRepo.get_one(question_id)
+        geopos = await GeoPosRepo.get_one(question.geopos_id)
+        return templates.TemplateResponse(
+            "question.html",
+            {
+                "request": request,
+                "question": question,
+                "geopos": geopos,
+            },
+        )
+    except NoResultFound:
+        return templates.TemplateResponse(
+            "question.html",
+            {
+                "request": request,
+                "question": question,
+                "geopos": None,
+            },
+        )
 
 
 @router.get("/questions", response_class=HTMLResponse)
