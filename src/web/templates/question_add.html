@@ -47,12 +47,14 @@
                 <!-- Шаг 3: Добавить геолокацию -->
                 <div class="slide" id="step3">
                     <div class="mb-3">
-                        <label for="latitude" class="form-label">Широта</label>
-                        <input type="number" step="any" class="form-control" id="latitude" name="latitude" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="longitude" class="form-label">Долгота</label>
-                        <input type="number" step="any" class="form-control" id="longitude" name="longitude" required>
+                        <label for="geopos" class="form-label">Выберите геолокацию</label>
+                        <select class="form-select" id="geopos" name="geopos_id" required>
+                            <option value="" selected disabled>Выберите геолокацию</option>
+                            {% for geo in geoposes %}
+                                <option value="{{ geo.id }}">{{ geo.latitude }}, {{ geo.longitude }}
+                                    - {{ geo.description }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                     <button type="button" class="btn btn-secondary" onclick="prevStep()">Назад</button>
                     <button type="submit" class="btn btn-primary">Сохранить</button>

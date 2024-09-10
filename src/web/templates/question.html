@@ -54,11 +54,35 @@
                         </div>
                     </div>
                     <div class="card-footer text-end">
-                        <a href="#" class="btn btn-primary">Изменить</a>
-                        <form action="#" method="post" class="d-inline">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <button type="submit" class="btn btn-danger">Удалить</button>
-                        </form>
+                        <a href="/site/questions/{{ question.id }}/edit" class="btn btn-primary">Изменить</a>
+
+                        <!-- Кнопка для вызова модального окна подтверждения -->
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal">
+                            Удалить
+                        </button>
+
+                        <!-- Модальное окно -->
+                        <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteConfirmModalLabel">Подтверждение удаления</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        Вы уверены, что хотите удалить этот вопрос?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                                        <form action="/site/questions/{{ question.id }}" method="post" class="d-inline">
+                                            <input type="hidden" name="method" value="DELETE">
+                                            <button type="submit" class="btn btn-danger">Удалить</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

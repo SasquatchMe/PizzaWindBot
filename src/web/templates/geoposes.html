@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <table id="geoposesTable" class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Широта</th>
+            <th scope="col">Долгота</th>
+            <th scope="col">Описание</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for geopos in geoposes %}
+            <tr class="" data-href="/site/geoposes/{{ geopos.id }}">
+                <th scope="row">{{ geopos.id }}</th>
+                <td>{{ geopos.latitude }}</td>
+                <td>{{ geopos.longitude }}</td>
+                <td>{{ geopos.description }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // DataTables инициализация
+            $('#geoposesTable').DataTable({
+                language: {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Russian.json"  // Подключение русского перевода
+                },// Отключить поиск
+                paging: false,     // Отключить пагинацию
+                info: false,       // Отключить информацию о таблице
+                lengthChange: false  // Отключить выбор количества строк на странице
+            });
+
+            // Реализация кликабельных строк
+            let rows = document.querySelectorAll(".clickable-row");
+            rows.forEach(function (row) {
+                row.addEventListener("click", function () {
+                    window.location.href = this.getAttribute("data-href");
+                });
+            });
+        });
+    </script>
+{% endblock %}
+çc

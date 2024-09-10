@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Изменить вопрос{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h2>Изменить вопрос</h2>
+        <div class="slide-container">
+            <form id="questionForm" action="/site/questions/{{ question.id }}/update" method="post">
+                <!-- Шаг 1: Изменить текст вопроса -->
+                <div class="slide active" id="step1">
+                    <div class="mb-3">
+                        <label for="questionText" class="form-label">Текст вопроса</label>
+                        <input type="text" class="form-control" id="questionText" name="questionText" value="{{ question.text }}" required>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="nextStep()">Далее</button>
+                </div>
+
+                <!-- Шаг 2: Изменить ответы -->
+                <div class="slide" id="step2">
+                    <div id="answersContainer">
+                        {% for answer in question.answers %}
+                            <div class="mb-3">
+                                <label class="form-label">Ответ {{ loop.index }}</label>
+                                <input type="text" class="form-control" name="answer{{ loop.index }}" value="{{ answer.text }}" required>
+                                <input type="radio" name="correctAnswer" value="{{ loop.index - 1 }}" {% if answer.is_correct %}checked{% endif %}> Правильный ответ
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <button type="button" class="btn btn-secondary" onclick="prevStep()">Назад</button>
+                    <button type="button" class="btn btn-primary" onclick="nextStep()">Далее</button>
+                </div>
+
+                <!-- Шаг 3: Изменить геолокацию -->
+                <div class="slide" id="step3">
+                    <div class="mb-3">
+                        <label for="geopos" class="form-label">Выберите геолокацию</label>
+                        <select class="form-select" id="geopos" name="geopos_id" required>
+                            <option value="" disabled>Выберите геолокацию</option>
+                            {% for geo in geoposes %}
+                                <option value="{{ geo.id }}" {% if question.geopos_id == geo.id %}selected{% endif %}>
+                                    {{ geo.latitude }}, {{ geo.longitude }} - {{ geo.description }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-secondary" onclick="prevStep()">Назад</button>
+                    <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+
+        function showStep(step) {
+            document.querySelectorAll('.slide').forEach(function (element) {
+                element.classList.remove('active');
+            });
+            document.getElementById(`step${step}`).classList.add('active');
+            currentStep = step;
+        }
+
+        function nextStep() {
+            if (currentStep < 3) {
+                showStep(currentStep + 1);
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                showStep(currentStep - 1);
+            }
+        }
+
+        // Initialize the first step as visible
+        showStep(currentStep);
+    </script>
+{% endblock %}

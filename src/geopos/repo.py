@@ -29,6 +29,14 @@ class GeoPosRepo:
             return geopos_models
 
     @classmethod
+    async def get_only_geos(cls):
+        async with new_session() as session:
+            query = select(GeoPosOrm)
+            result = await session.execute(query)
+            geoposes = result.scalars().all()
+            return geoposes
+
+    @classmethod
     async def add_one(cls, data: SAddGeoPos):
         async with new_session() as session:
             geopos_data = data.model_dump()
