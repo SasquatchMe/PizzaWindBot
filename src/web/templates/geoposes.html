@@ -9,6 +9,7 @@
             <th scope="col">Широта</th>
             <th scope="col">Долгота</th>
             <th scope="col">Описание</th>
+            <th scope="col"></th>
         </tr>
         </thead>
         <tbody>
@@ -18,6 +19,15 @@
                 <td>{{ geopos.latitude }}</td>
                 <td>{{ geopos.longitude }}</td>
                 <td>{{ geopos.description }}</td>
+                <td>
+                    <!-- Удаление -->
+                    <form action="/site/geoposes/{{ geopos.id }}/delete" method="post" class="d-inline">
+                        <input type="hidden" name="method" value="DELETE">
+                        <button type="submit" class="btn btn-danger btn-sm" title="Удалить">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </form>
+                </td>
             </tr>
         {% endfor %}
         </tbody>

@@ -18,3 +18,8 @@
 .d-block {
     color: #111111;
 }
+
+.btn-danger.btn-sm {
+    font-size: 0.75rem; /* Меньший размер кнопки */
+    padding: 0.25rem 0.5rem; /* Уменьшенные отступы */
+}

@@ -35,40 +35,6 @@ async def questions_add_form(request: Request):
     )
 
 
-@router.get("/geoposes/add")
-async def geoposes_add_form(request: Request):
-    return templates.TemplateResponse("geopose_add.html", {"request": request})
-
-
-@router.post("/questions/{question_id}")
-async def delete_question(request: Request, question_id: int, method: str = Form(...)):
-    if method == "DELETE":
-        await QuestionRepo.delete_question(question_id)
-        return RedirectResponse(url="/site/questions", status_code=303)
-    return RedirectResponse(
-        url=f"/site/questions/{question_id}", status_code=400
-    )  # На случай ошибки
-
-
-@router.post("/geoposes/add")
-async def geoposes_add(
-    request: Request,
-    latitude: float = Form(...),
-    longitude: float = Form(...),
-    desc: str = Form(...),
-):
-    with new_session() as session:
-        geopos = GeoPosOrm(
-            latitude=latitude,
-            longitude=longitude,
-            description=desc,
-        )
-        session.add(geopos)
-        await session.commit()
-
-    return RedirectResponse(url="/site/geoposes", status_code=303)
-
-
 @router.post("/questions/add")
 async def questions_add(
     request: Request,
@@ -99,6 +65,30 @@ async def questions_add(
         await db.commit()
 
     return RedirectResponse(url="/site/questions", status_code=303)
+
+
+@router.get("/geoposes/add")
+async def geoposes_add_form(request: Request):
+    return templates.TemplateResponse("geopose_add.html", {"request": request})
+
+
+@router.post("/geoposes/add")
+async def geoposes_add(
+    request: Request,
+    latitude: float = Form(...),
+    longitude: float = Form(...),
+    desc: str = Form(...),
+):
+    with new_session() as session:
+        geopos = GeoPosOrm(
+            latitude=latitude,
+            longitude=longitude,
+            description=desc,
+        )
+        session.add(geopos)
+        await session.commit()
+
+    return RedirectResponse(url="/site/geoposes", status_code=303)
 
 
 @router.get("/questions/{question_id}")
@@ -178,3 +168,26 @@ async def question_update(
         await db.commit()
 
     return RedirectResponse(url=f"/site/questions/{question_id}", status_code=303)
+
+
+@router.post("/questions/{question_id}")
+async def delete_question(request: Request, question_id: int, method: str = Form(...)):
+    if method == "DELETE":
+        await QuestionRepo.delete_question(question_id)
+        return RedirectResponse(url="/site/questions", status_code=303)
+    return RedirectResponse(
+        url=f"/site/questions/{question_id}", status_code=400
+    )  # На случай ошибки
+
+
+@router.post("/geoposes/{geopos_id}/delete")
+async def delete_geopos(request: Request, geopos_id: int, method: str = Form(...)):
+    if method == "DELETE":
+        async with new_session() as db:
+            geopos = await db.get(GeoPosOrm, geopos_id)
+            if geopos:
+                await db.delete(geopos)
+                await db.commit()
+                return RedirectResponse(url="/site/geoposes", status_code=303)
+            return RedirectResponse(url="/site/geoposes", status_code=404)
+    return RedirectResponse(url="/site/geoposes", status_code=400)  # В случае ошибки
