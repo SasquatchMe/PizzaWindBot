@@ -1,9 +1,10 @@
 from typing import Any
 
-from sqlalchemy import select, Result
+from sqlalchemy import select, Result, func
 from sqlalchemy.orm import selectinload
 
 from src.application.database import new_session
+from src.geopos.models import GeoPosOrm
 from src.questions.models import QuestionOrm
 from src.questions.schemas import SAddQuestion
 
@@ -49,3 +50,19 @@ class QuestionRepo:
             await session.delete(question)
             await session.commit()
             return question.id
+
+    @classmethod
+    async def get_random_questions(cls, value: int):
+        async with new_session() as session:
+            query = (
+                select(QuestionOrm)
+                .options(
+                    selectinload(QuestionOrm.answers), selectinload(QuestionOrm.geopos)
+                )
+                .order_by(func.random())
+                .limit(value)
+            )
+
+            result: Result[Any] = await session.execute(query)
+            questions = result.scalars().all()
+            return questions

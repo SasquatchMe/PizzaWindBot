@@ -6,6 +6,7 @@ from src.geopos.router import router as geopos_router
 from src.questions.router import router as questions_router
 from src.users.router import router as users_router
 from src.web.views.router import router as pages_router
+from src.promocodes.router import router as promocodes_router
 
 
 def create_app() -> FastAPI:
@@ -40,5 +41,8 @@ def create_app() -> FastAPI:
 
     app.include_router(
         pages_router,
+    )
+    app.include_router(
+        promocodes_router,
     )
     return app

@@ -23,3 +23,9 @@ async def get_all_questions():
 async def delete_question(question_id: int):
     question = await QuestionRepo.delete_question(question_id)
     return {"status": "ok", "question_id": question_id}
+
+
+@router.get("/random/{value}")
+async def get_random_questions(value: int):
+    questions = await QuestionRepo.get_random_questions(value)
+    return questions

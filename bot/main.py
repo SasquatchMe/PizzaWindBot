@@ -8,8 +8,9 @@ from aiogram.types import BotCommand
 
 from bot.config import BOT_***, DEFAULT_COMMANDS
 from bot.quiz.callback_handlers.quiz_handler import router as start_quiz_router
+from bot.quiz.constants import GREETING
 from bot.quiz.message_handlers.quiz import router as quiz_router
-from bot.quiz.message_handlers.start_handler import router as start_router
+from bot.quiz.message_handlers.commands import router as start_router
 
 
 async def main():
@@ -21,7 +22,8 @@ async def main():
         ]
     )
     await bot.set_my_description(
-        description="Квест-БОТ by DVOR\nИграйте, исследуйте, получайте призы!"
+        # description="Квест-БОТ by DVOR\nИграйте, исследуйте, получайте призы!"
+        description=GREETING
     )
     await bot.set_my_short_description(short_description="Квест-БОТ by DVOR")
 

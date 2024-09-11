@@ -13,9 +13,11 @@ from aiogram.utils.formatting import (
     as_key_value,
 )
 
+from bot.quiz.constants import SHORT_FAQ
 from bot.quiz.keyboards.location_inline_keyboard import location_inline_keyboard
 from bot.quiz.keyboards.question_keyboard import question_keyboard
 from bot.quiz.states.states import Quest
+from bot.utils.generate_promocode import generate_promocode
 from bot.utils.geopos import check_geopos
 from bot.utils.get_questions import get_questions
 from bot.utils.get_url import get_url
@@ -29,13 +31,15 @@ async def start_quest(message: Message, state: FSMContext, step: int = 0):
     await state.update_data(step=step)
     if step == 0:
         await state.update_data(questions=get_questions())
+        await message.answer(text=SHORT_FAQ)
+        await asyncio.sleep(10)
+
         await message.answer(
             text="Квест начинается!", reply_markup=ReplyKeyboardRemove()
         )
         await asyncio.sleep(1)
 
     data = await state.get_data()
-    # todo На первом шаге сделать первый вопрос а не след
     try:
         question = data["questions"][step]
     except IndexError:
@@ -122,6 +126,18 @@ async def exit_quest(message: Message, state: FSMContext):
     )
 
     await message.answer(**content.as_kwargs(), reply_markup=ReplyKeyboardRemove())
+    if correct > 0:
+        promocode = generate_promocode(correct)
+
+        await message.answer(
+            text=f'Поздравляем, Вы выиграли {correct * 10}% скидку в "Пицца-портале"! '
+            f"Ваш промокод: {promocode}. Покажите его нашему кассиру!"
+        )
+    else:
+        await message.answer(
+            text=f"В этот раз Вам не повезло :( Попробуйте еще раз, Вы точно справитесь лучше!"
+        )
+
     await state.set_data({})
     await state.clear()
 

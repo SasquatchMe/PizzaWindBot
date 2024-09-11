@@ -1,0 +1,15 @@
+services:
+  bot_service:
+    build:
+      context: ..
+      dockerfile: Dockerfile-bot_service
+
+    command: python bot_service/main.py -d
+    container_name: bot_service
+    volumes:
+      - ../bot_service:/app/bot_service/
+    networks:
+      - pizza_window
+
+networks:
+  pizza_window:

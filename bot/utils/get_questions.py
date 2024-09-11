@@ -4,9 +4,10 @@ import requests
 
 
 def get_questions_from_api():
-    geos = requests.get("http://main-app:8000/geopos/random/5").json()
-    # geos = requests.get("http://localhost:8000/geopos/random/5").json()
-    return geos
+
+    questions = requests.get("http://main-app:8000/questions/random/5").json()
+
+    return questions
 
 
 @dataclass
@@ -42,19 +43,18 @@ class Question:
 
 
 def map_question_answer(data):
-    result = []
-
-    for geopos in data:
+    questions_dto = []
+    for question in data:
         answers = []
-        coord = (geopos["latitude"], geopos["longitude"])
-        q_text = geopos["questions"]["text"]
 
-        for answer in geopos["questions"]["answers"]:
+        for answer in question["answers"]:
             answers.append(Answer(text=answer["text"], is_correct=answer["is_correct"]))
 
-        result.append(Question(text=q_text, answers=answers, location=coord))
-
-    return result
+        coord = question["geopos"]["latitude"], question["geopos"]["longitude"]
+        questions_dto.append(
+            Question(text=question["text"], answers=answers, location=coord)
+        )
+    return questions_dto
 
 
 def get_questions():
